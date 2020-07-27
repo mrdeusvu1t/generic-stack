@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Linq;
 using GenericStackTask;
 using NUnit.Framework;
 
@@ -50,7 +51,7 @@ namespace GeneticStackTask.Tests
         [Order(2)]
         public void ToArray_Test()
         {
-            T[] copy = _stack.ToArray();
+            T[] copy = _stack.Reverse().ToArray(); 
             Assert.Multiple((() =>
             {
                 CollectionAssert.AreEqual(_array, copy);
