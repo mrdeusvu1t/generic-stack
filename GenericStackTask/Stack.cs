@@ -10,12 +10,16 @@ namespace GenericStackTask
     /// <typeparam name="T">Specifies the type of elements in the stack.</typeparam>
     public class Stack<T> : IEnumerable<T>
     {
+        private int _capacity;
+        private T[] _stack;
+
         /// <summary>
         /// Initializes a new instance of the stack class that is empty and has the default initial capacity.
         /// </summary>
         public Stack()
         {
-            throw new NotImplementedException();
+            _capacity = 0;
+            _stack = new T[_capacity];
         }
 
         /// <summary>
@@ -25,7 +29,8 @@ namespace GenericStackTask
         /// <param name="capacity">The initial number of elements of stack.</param>
         public Stack(int capacity)
         {
-            throw new NotImplementedException();
+            _capacity = capacity;
+            _stack = new T[_capacity];
         }
 
         /// <summary>
@@ -36,13 +41,30 @@ namespace GenericStackTask
         /// <param name="collection">The collection to copy elements from.</param>
         public Stack(IEnumerable<T> collection)
         {
-            throw new NotImplementedException();
+            int capacity = 0;
+            foreach (T item in collection)
+            {
+                capacity++;
+            }
+
+            _capacity = capacity;
+            _stack = new T[_capacity];
+
+            int i = 0;
+            foreach (T item in collection)
+            {
+                _stack[i] = item;
+                i++;
+            }
         }
 
         /// <summary>
         /// Gets the number of elements contained in the stack.
         /// </summary>
-        public int Count => throw new NotImplementedException();
+        public int Count
+        {
+            get => _capacity;
+        }
 
         /// <summary>
         /// Removes and returns the object at the top of the stack.
@@ -50,7 +72,16 @@ namespace GenericStackTask
         /// <returns>The object removed from the top of the stack.</returns>
         public T Pop()
         {
-            throw new NotImplementedException();
+            if (_capacity - 1 < 0)
+            {
+                throw new InvalidOperationException();
+            }
+
+            T temp = _stack[Count - 1];
+
+            _capacity--;
+
+            return temp;
         }
 
         /// <summary>
@@ -59,7 +90,9 @@ namespace GenericStackTask
         /// <returns>The object at the top of the stack.</returns>
         public T Peek()
         {
-            throw new NotImplementedException();
+            T temp = _stack[Count - 1];
+
+            return temp;
         }
 
         /// <summary>
@@ -69,16 +102,36 @@ namespace GenericStackTask
         /// The value can be null for reference types.</param>
         public void Push(T item)
         {
-            throw new NotImplementedException();
+            _capacity++;
+
+            if (_capacity > _stack.Length + 1)
+			{
+                throw new InvalidCastException();
+			}
+
+            T[] temp = new T[_capacity];
+
+            for (int i = 0; i < _capacity; i++)
+            {
+                if (i == _capacity - 1)
+                {
+                    temp[i] = item;
+                    break;
+                }
+
+                temp[i] = _stack[i];
+            }
+
+            _stack = temp;
         }
 
-       /// <summary>
-       /// Copies the elements of stack to a new array.
-       /// </summary>
-       /// <returns>A new array containing copies of the elements of the stack.</returns>
+        /// <summary>
+        /// Copies the elements of stack to a new array.
+        /// </summary>
+        /// <returns>A new array containing copies of the elements of the stack.</returns>
         public T[] ToArray()
         {
-            throw new NotImplementedException();
+            return _stack;
         }
 
         /// <summary>
@@ -88,7 +141,20 @@ namespace GenericStackTask
         /// <returns>Return true if item is found in the stack; otherwise, false.</returns>
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            if (item == null)
+			{
+                return true;
+			}
+
+            foreach (var myItem in _stack)
+            {
+                if (item.Equals(myItem))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -96,7 +162,8 @@ namespace GenericStackTask
         /// </summary>
         public void Clear()
         {
-            throw new NotImplementedException();
+            _capacity = 0;
+            _stack = new T[_capacity];
         }
 
         /// <summary>
@@ -105,12 +172,15 @@ namespace GenericStackTask
         /// <returns>Return Enumerator object for the stack.</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            for (int i = _stack.Length - 1; i >= 0; i--)
+			{
+                yield return _stack[i];
+			}
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
     }
 }
